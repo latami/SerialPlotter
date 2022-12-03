@@ -110,8 +110,8 @@ void MainWindow::on_pushButton_openDevice_clicked()
     // Check if file descriptor is valid (In sense that device should be open)
     if (this->serial_fd == -1) {
 
-
-        this->serial_fd = serial_open(ui->comboBox_device->currentText().toStdString().data(), baud_rates[16]);
+        unsigned int bauds = baud_rates[12+ui->comboBox_baudrate->currentIndex()];
+        this->serial_fd = serial_open(ui->comboBox_device->currentText().toStdString().data(), bauds);
         if (this->serial_fd != -1) {
             serial_set_struct(&this->reader, this->serial_fd, printLine);
 
