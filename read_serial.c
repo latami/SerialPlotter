@@ -25,7 +25,7 @@
 
 #define READBUF_SIZE 1024
 
-int serial_open(const char *dev) {
+int serial_open(const char *dev, unsigned int baudrate) {
     int ser_fd = open(dev, O_RDONLY);
     if (ser_fd == -1) {
         fprintf(stderr, "Error: %s\n", strerror(errno));
@@ -70,8 +70,8 @@ int serial_open(const char *dev) {
     tty.c_cc[VMIN]  = 1;
 
 
-    cfsetispeed(&tty, B115200);
-    cfsetospeed(&tty, B115200);
+    cfsetispeed(&tty, baudrate);
+    cfsetospeed(&tty, baudrate);
 
     if (tcsetattr(ser_fd, TCSANOW, &tty) != 0) {
         fprintf(stderr, "Setting tty failed: %s\n", strerror(errno));
