@@ -239,15 +239,21 @@ void Plotter::redraw() {
     QPainter scalePainter(&scalePix);
     scalePainter.setPen(QPen(QBrush(QColor(255,255,255,255)), 2.0f));
 
-    int notch = scale.height()/10;
-    // Round upward to tens
-    notch = (notch+9)/10 * 10;
-
-    int mid = (int)(scale.height()/2.0f / notch)*notch;
-    for(int i = scale.height()/2.0 - mid; i < scale.height(); i += notch) {
+    int notch = 1;
+    const int positiveNotchesTarget = 5;
+    while(scalingFactor*notch*positiveNotchesTarget < scale.height()/2) {
+        if (notch == 2)
+            // Specialcase, 1, 2, 5, 10, 20...
+            notch = 5;
+        else
+            notch *= 2;
+    }
+    notch *= scalingFactor;
+    int positiveNotchesActual = scale.height()/2 / notch;
+    for(int i = scale.height()/2 - notch*positiveNotchesActual; i < scale.height(); i += notch) {
         scalePainter.drawLine(0, i, scale.width()-1, i);
         QString str;
-        str.setNum((scale.height()/2.0f - i)/scalingFactor);
+        str.setNum((scale.height()/2 - i)/scalingFactor);
         scalePainter.drawText(0, i-2, str);
     }
 
