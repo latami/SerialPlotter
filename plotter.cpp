@@ -71,10 +71,9 @@ void Plotter::updatePlotScaling() {
         }
     }
     float scaling = this->height() / (largestValue *2.0f);
-    /* FIXME: using mul 128 to avoid zero when scalingFactor goes under 2.
-     * Mul by 16 is to support few subzero scaling factors that are multiples of 2. */
+    /* Find closest power of two scaling that fits value to a plot. */
     float factor;
-    for(int power=-4; power < 5; power++) {
+    for(int power=-7; power < 8; power++) {
         factor = qPow(2.0f, -power);
         if (factor < scaling)
             break;
